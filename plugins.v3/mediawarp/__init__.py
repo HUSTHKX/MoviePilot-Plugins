@@ -679,7 +679,12 @@ class MediaWarp(_PluginBase):
         Path(self.__config_path).mkdir(parents=True, exist_ok=True)
         Path(self.__logs_dir).mkdir(parents=True, exist_ok=True)
 
-        self.process = psutil.Popen([str(self.__mediawarp_path)])
+        # MediaWarp 二进制以相对路径 config/config.yaml 读取配置，
+        # 因此工作目录必须固定为插件数据根目录，否则会 panic 退出。
+        self.process = psutil.Popen(
+            [str(self.__mediawarp_path)],
+            cwd=str(self.__data_dir),
+        )
 
         if self.process.is_running():
             logger.info(
