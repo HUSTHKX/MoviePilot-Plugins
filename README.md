@@ -21,6 +21,45 @@ https://github.com/HUSTHKX/MoviePilot-Plugins
 - [115网盘STRM助手 V3](https://github.com/HUSTHKX/MoviePilot-Plugins/tree/main/plugins.v3/p115strmhelper)：
   115网盘STRM生成一条龙服务。适配 MoviePilot V3 SDK。
 
+#### 工具类插件
+
+- [MediaWarp V3](https://github.com/HUSTHKX/MoviePilot-Plugins/tree/main/plugins.v3/mediawarp)：
+  EmbyServer/Jellyfin 中间件：优化播放 Strm 文件、自定义前端样式、自定义允许访问客户端、嵌入脚本。
+  适配 MoviePilot V3 SDK。
+
+## 说明：mediawarp 的二进制与配置版本
+
+`mediawarp` **不携带二进制**，插件启动时按需从上游 GitHub Release 下载并解压到
+`/config/plugins/mediawarp/MediaWarp`，版本号记录在 `version.txt`。
+
+- **下载源**：`AkimioJR/MediaWarp`（上游官方）
+- **默认版本**：`v0.2.5`（常量 `DEFAULT_MEDIAWARP_VERSION`，置空则启动时查询 GitHub API 取最新正式版）
+- **资产命名**：`MediaWarp_v{tag}_{os}_{arch}.tar.gz`（**版本号带 `v` 前缀**）
+
+> ⚠️ 注意区分两个仓库：
+> - `DDSRem-Dev/MediaWarp` —— 早期 fork，**已停在 v0.1.12**，配置 schema 是旧的大写驼峰
+> - `AkimioJR/MediaWarp` —— **上游官方**，当前 v0.2.5，配置 schema 为小写下划线
+>
+> 本插件统一切换到**上游官方**，因此配置文件 schema 与 0.1.x 不兼容，升级时需迁移。
+
+### 0.1.12 → 0.2.5 配置 schema 变化（易猜错项）
+
+| 旧 key（0.1.x） | 新 key（0.2.x） | 备注 |
+|---|---|---|
+| `ClientFilter` | **`client`** | ⚠️ 不是 `client_filter` |
+| `ClientFilter.ClientList` | **`client.list`** | ⚠️ 不是 `client.client_list` |
+| `HTTPStrm` | **`http_strm`** | ⚠️ 不是 `h_t_t_p_strm` |
+| `MediaServer.ADDR` | `server.addr` | ⚠️ 不是 `a_d_d_r` |
+| `HTTPStrm.TransCode` | `http_strm.proxy` | **语义相反**：`TransCode=False` → `proxy=false` |
+| `AlistStrm.TransCode` | `alist_strm.proxy` | 同上 |
+| `Logger.ServiceLogger` | `log.service` | 上游**保留**（未移除） |
+| `Web.Head` | `web.head` | 上游**保留**（未移除） |
+
+新增段落：`cache`（含 `http_strm_ttl`、`alist_api_ttl`、`image_ttl`、`subtitle_ttl`）。
+
+> 权威 schema 以仓库内 `config/config.yaml.example` 为准：
+> `https://raw.githubusercontent.com/AkimioJR/MediaWarp/main/config/config.yaml.example`
+
 ## 说明：p115strmhelper 为什么自带 wheels
 
 `plugins.v3/p115strmhelper/wheels/` 目录存放该插件的全部 Python 依赖 wheel。

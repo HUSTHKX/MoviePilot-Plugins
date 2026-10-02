@@ -1,0 +1,18 @@
+[project]
+name = "moviepilot-plugin-mediawarp"
+dynamic = ["version"]
+requires-python = ">=3.12"
+dependencies = [
+    "ruamel.yaml",
+    "psutil",
+    "pytz",
+    "apscheduler",
+    "requests",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = { attr = "version.VERSION" }
