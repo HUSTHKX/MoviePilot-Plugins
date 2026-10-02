@@ -1,0 +1,50 @@
+[project]
+name = "moviepilot-plugin-p115strmhelper"
+dynamic = ["version"]
+requires-python = ">=3.12"
+dependencies = [
+    # 115 官方/第三方 SDK（p115center-sdk 为作者自研增值服务，独立 PyPI 包，支持 3.14）
+    #
+    # ⚠️ 版本锁定说明（勿擅自升级，实测踩坑记录 2026-10-02）
+    # 本插件源码依赖 p115client.tool.iterdir 的 iter_file_list / iter_files_with_path_skim /
+    # iter_files_with_path，这三个符号仅存在于 p115client <= 0.0.9.6.5.1。
+    # p115client 0.0.9.6.6 起 iterdir.py 大幅重构（顶层 def 47→19），上述符号被移除，改为
+    # iter_files_skim，故插件无法兼容 0.0.9.6.6 及以上任何版本。
+    #
+    # 同时，p115client <= 0.0.9.6.7 内部调用 concurrenttools.threadpool_map / taskgroup_map，
+    # 而 python-concurrenttools 0.1.9 将二者改名为 thread_conmap / async_conmap，导致 ImportError。
+    # 因此必须钉住 python-concurrenttools==0.1.8（该版本仍提供 threadpool_map/taskgroup_map）。
+    #
+    # 结论：唯一可行组合 = p115client==0.0.9.6.5.1 + python-concurrenttools==0.1.8。
+    # 该组合与上游 DDSRem-Dev/MoviePilot-Plugins main 分支 p115disk 的 pin 一致（上游同样未升级）。
+    "p115client==0.0.9.6.5.1",
+    "python-concurrenttools==0.1.8",
+    "p115center-sdk==0.0.17",
+    # 阿里云盘
+    "aligo~=6.2.8",
+    # 通用依赖
+    "sentry-sdk~=2.68.0",
+    "qrcode_terminal~=0.8",
+    "pyahocorasick~=2.3.0",
+    "diskcache~=5.6.3",
+    "zstandard~=0.25.0",
+    "mfusepy~=3.1.0",
+    "slippers-proxy~=0.3.0",
+    "orjson",
+    "numpy",
+    "httpx[http2]",
+    # OSS 直传（core/p115disk.py 使用）
+    "oss2",
+    "cryptography",
+    # Rust Mode（wheel 同时提供 cp312 / cp314 版本）
+    "full_strm_sync==0.1.6",
+    "txt_tree_storage==0.2.1",
+    "share_strm_scan==0.2.2",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = { attr = "version.VERSION" }

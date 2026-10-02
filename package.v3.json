@@ -1,0 +1,16 @@
+{
+  "P115StrmHelper": {
+    "name": "115网盘STRM助手",
+    "description": "115网盘STRM生成一条龙服务",
+    "labels": "云盘",
+    "version": "3.0.0",
+    "release": true,
+    "icon": "https://raw.githubusercontent.com/jxxghp/MoviePilot-Frontend/refs/heads/v2/src/assets/images/misc/u115.png",
+    "author": "DDSRem",
+    "system_version": ">=3.0.0",
+    "level": 1,
+    "history": {
+      "v3.0.0": "适配 MoviePilot V3 SDK：依赖清单迁移至 pyproject.toml；跨插件引用（P115Disk.P115Api）改为动态桥接并支持优雅降级；数据库/本地化/迁移脚本路径改为按插件位置动态定位，不再硬编码 app/plugins 路径；同步 MoviePilot V3 已内置的失败整理重试能力；依赖版本锁定为 p115client==0.0.9.6.5.1 + python-concurrenttools==0.1.8（唯一兼容组合：新版 p115client 移除了本插件使用的 iter_file_list/iter_files_with_path_skim，而 concurrenttools 0.1.9 移除了旧版 p115client 使用的 threadpool_map/taskgroup_map）；wheels 同步回退并补充 orjson"
+    }
+  }
+}

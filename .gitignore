@@ -1,0 +1,53 @@
+# 字节码 / 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C 扩展
+*.so
+
+# 打包 / 分发
+.Python
+build/
+develop-eggs/
+node_modules/
+frontend/*/dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+# ⚠️ 白名单：p115strmhelper 的 wheels 必须提交（full_strm_sync / txt_tree_storage /
+# share_strm_scan 三个 Rust 包不在 PyPI，缺失会导致 Rust Mode 功能失效）
+!plugins.v3/p115strmhelper/wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 测试 / 覆盖率
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# 编辑器 / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 日志 / 临时文件
+*.log
+*.tmp
+.temp/
