@@ -30,13 +30,26 @@ from .version import VERSION
 
 
 # ==================== MediaWarp 上游二进制管理 ====================
-# 下载源：上游官方仓库（原 Akimio521，作者改名后为 AkimioJR）
-# 注意：DDSRem-Dev/MediaWarp 是早期 fork，已停在 v0.1.12，配置 schema 与上游
-#       0.2.x 完全不同，因此这里统一切换到上游。
-MEDIAWARP_REPO = "AkimioJR/MediaWarp"
+# 下载源：自有仓库的 patched Release（修复 Jellyfin 12 认证变更导致的 302 直链失效）
+#
+# 背景：
+#   上游 AkimioJR/MediaWarp v0.2.5 的 ItemsServiceQueryItem 仅用 URL 查询参数
+#   `?api_key=xxx` 认证。Jellyfin 12 已移除该方式（返回 401），导致：
+#     - 请求 /Items 失败 → 拿不到 Item.Path → 前缀匹配 prefix_list 无法进行
+#     - MediaWarp 退化为透明透传（HTTP 200），不再返回 302 直链
+#   日志症状：【WARNING】请求 ItemsServiceQueryItem 失败：unexpected end of JSON input
+#
+# 修复：
+#   改用请求头 `Authorization: MediaBrowser Token="xxx"`，并保留 api_key 查询参数
+#   以兼容旧版服务端；同时显式暴露非 2xx 响应。
+#
+# 若要回到上游原始行为，把 MEDIAWARP_REPO 改回 "AkimioJR/MediaWarp"，
+# 并把 DEFAULT_MEDIAWARP_VERSION 改为上游正式 tag（如 "v0.2.5"）即可。
+MEDIAWARP_REPO = "HUSTHKX/MoviePilot-Plugins"
 
-# 默认跟随的版本。填 None 表示启动时查询 GitHub API 取最新正式版（更省心但依赖网络）。
-DEFAULT_MEDIAWARP_VERSION = "v0.2.5"
+# 默认跟随的版本 = 自有 Release 的 tag。
+# 该 tag 下的资产命名遵循上游约定：MediaWarp_{tag}_{os}_{arch}.tar.gz
+DEFAULT_MEDIAWARP_VERSION = "mediawarp-patched-v0.2.5"
 
 # 上游发布资产的命名模板：MediaWarp_v0.2.5_linux_amd64.tar.gz
 # 注意版本号带 "v" 前缀 —— 与 DDSRem 旧版（无 v）不同。
@@ -762,8 +775,8 @@ class MediaWarp(_PluginBase):
         """
         获取下载链接
 
-        上游资产命名：MediaWarp_v0.2.5_linux_amd64.tar.gz
-        注意版本号带 "v" 前缀（DDSRem 旧版无 v），且仓库已换成上游官方。
+        自有 Release 资产命名：MediaWarp_mediawarp-patched-v0.2.5_linux_amd64.tar.gz
+        注意 tag 内含连字符，且包内二进制名为 MediaWarp（位于包根）。
 
         :return str: 完整的下载 URL
         """
