@@ -106,9 +106,9 @@ class P115StrmHelper(_PluginBase):
     # 插件版本
     plugin_version = VERSION
     # 插件作者
-    plugin_author = "DDSRem"
-    # 作者主页
-    author_url = "https://github.com/DDSRem"
+    plugin_author = "HUSTHKX"
+    # 作者主页（前端会据此自动拼接 `.png` 作为作者头像）
+    author_url = "https://github.com/HUSTHKX"
     # 插件配置项ID前缀
     plugin_config_prefix = "p115strmhelper_"
     # 加载顺序
